@@ -35,7 +35,7 @@ startup = () => {
             break;
 
             case "view all employees listed by their department":
-            
+            viewDept()
             break;
 
             case "view all employees listed by their role":
@@ -66,7 +66,7 @@ startup = () => {
 };
 
 viewAll = () => {
-    query = "SELECT Id, firstName, LastName FROM employee ";
+    let query = "SELECT Id, firstName, LastName FROM employee ";
     query += "RIGHT JOIN role ON employee.roleId = role.Id ";
     query += "RIGHT JOIN department ON role.deptId = department.Id ";
     connection.query(
@@ -77,3 +77,44 @@ viewAll = () => {
         }
     )
 };
+
+viewDept = () => {
+    inquirer.prompt({
+        name: "Dept",
+        type: "list",
+        message: "Which department would you like to view?",
+        choices: ["Management",
+        "Accounting","Human Resources", 
+        "IT", "Research & Development",
+        "Marketing", "Sales", "Security", "Maintenance"]
+    }).then(function(answers){
+        let query = "SELECT Id, firstName, LastName FROM employee ";
+        query += "RIGHT JOIN role ON employee.roleId = role.Id ";
+        query += `RIGHT JOIN department ON role.deptId = department.Id Group BY ${answers.Dept}`
+        connection.query(query, function(err,res){
+            if(err) throw err;
+            console.log(res);
+            startup()
+        })
+    })
+};
+
+viewRole = () => {
+    inquirer.prompt({
+        name: "role",
+        type: "list",
+        message: "Which roles would you like to view?",
+        choices: ["Managers", "Accountant", "Bookkeepers" ,"Salespersons", "Computer Technicians",
+    "Office Clerks", "Secertaries", "HR Cordinators", "Digital Marketing Advisors", "Janitors", "Security Gaurd",
+    "Software Engineers", "Junior Programmers" ]
+    }).then(function(answers){
+        let query = "SELECT Id, firstName, Lastname FROM employee ";
+        query += `RIGHT JOIN role on employee.roleId = role.Id GROUP BY ${answers.role} `
+        query += "RIGHT JOIN department on role.deptId = department.Id"
+        connection.query(query, function(err, res){
+            if(err) throw err;
+            console.log(res)
+            startup()
+        })
+    })
+}
