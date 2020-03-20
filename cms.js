@@ -31,7 +31,7 @@ startup = () => {
     }).then(function(answers){
         switch(answers.action){
             case "view all employees listed":
-
+            viewAll()
             break;
 
             case "view all employees listed by their department":
@@ -63,4 +63,17 @@ startup = () => {
             break;
         }
     })
+};
+
+viewAll = () => {
+    query = "SELECT Id, firstName, LastName FROM employee ";
+    query += "RIGHT JOIN role ON employee.roleId = role.Id ";
+    query += "RIGHT JOIN department ON role.deptId = department.Id ";
+    connection.query(
+        query, function(err, res){
+            if(err) throw err;
+            console.log(res)
+            startup()
+        }
+    )
 };
