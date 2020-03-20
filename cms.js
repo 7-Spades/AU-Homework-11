@@ -39,7 +39,7 @@ startup = () => {
             break;
 
             case "view all employees listed by their role":
-
+            viewRole()
             break;
 
             case "add more departments":
@@ -118,3 +118,18 @@ viewRole = () => {
         })
     })
 }
+
+addDept = () => {
+    inquirer.prompt({
+        name: "addedDept",
+        type: "input",
+        message: "What's the name of your new Deptartment?"
+    }).then(function(answers){
+        let query = `INSERT INTO department(name) VALUES (${answers.addedDept})`
+        connection.query(query, function(err, res){
+            if(err) throw err;
+            console.log(`${answers.addedDept} was successfully added`)
+        })
+    })
+}
+
