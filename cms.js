@@ -219,7 +219,41 @@ let updateinfo = () => {
 };
 
 let updateDept = () => {
-    
+    let query = "SELECT name FROM department";
+    connection.query(query, function(err, res){
+        if(err) throw err;
+        inquirer.prompt([
+        {
+            name: "DeptName",
+            type: "rawlist",
+            message: "Which Department's name would you like to update?",
+            choices: function (){
+                let choiceArr = [];
+                for(let i = 0; i < res.length; i++){
+                    choiceArr.push(res[i].name)
+                }
+                choiceArr.push("Main Menu")
+                return choiceArr
+            }
+        },
+        {
+            name: "NewDeptName",
+            type: "input",
+            message: "What should your Department be renamed?"
+        }
+        ]).then(function(answers){
+            let query = "UPDATE department SET ? WHERE ?"
+            connection.query(query,
+            [
+                {
+                    
+                }
+            ]
+            )
+        })
+    })
+
+    })
 };
 
 let updateEmployee = () => {
