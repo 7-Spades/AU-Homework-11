@@ -51,7 +51,7 @@ startup = () => {
             break;
 
             case "add more employees":
-
+            addEmployee()
             break;
 
             case "update employee roles":
@@ -117,7 +117,7 @@ let viewRole = () => {
             startup()
         })
     })
-}
+};
 
 let addDept = () => {
     inquirer.prompt({
@@ -126,13 +126,13 @@ let addDept = () => {
         message: "What's the name of your new Deptartment?"
     }).then(function(answers){
         let query = `INSERT INTO department (name) VALUES (${answers.addedDept})`
-        connection.query(query, function(err, res){
+        connection.query(query, function(err){
             if(err) throw err;
             console.log(`${answers.addedDept} was successfully added`)
             startup()
         })
     })
-}
+};
 
 let addRole = () => {
     inquirer.prompt([{
@@ -151,9 +151,34 @@ let addRole = () => {
             title: answers.addedRole,
             salary: answers.salary
         },
-        function(err, res){
+        function(err){
             if(err) throw err;
             console.log(`${answers.addedRole} was successfully adde`)
+            startup()
+        })
+    })
+};
+
+let addEmployee = () => {
+    inquirer.prompt([{
+        name: "fstN",
+        type: "input",
+        message: "What's the fist name of your new employee?"
+    },
+    {
+        name: "lasN",
+        type: "input",
+        message: "What's the last name of your new employee?"
+    }]).then(function(answers){
+        let query = "INSERT INTO employee SET ?";
+        connection.query(query, 
+        {
+            firstName: answers.fstN,
+            LastName: answers.fstN
+        },
+        function(err){
+            if(err) throw err;
+            console.log(`${answers.fstN} ${answers.lasN} was successfully added`)
             startup()
         })
     })
