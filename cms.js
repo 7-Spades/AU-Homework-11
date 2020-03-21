@@ -26,7 +26,7 @@ startup = () => {
         "add more departments",
         "add more employee roles",
         "add more employees",
-        "update employee roles",
+        "update Company Information",
         "exit"]
     }).then(function(answers){
         switch(answers.action){
@@ -54,8 +54,8 @@ startup = () => {
             addEmployee()
             break;
 
-            case "update employee roles":
-            
+            case "update Company Information":
+            updateinfo()
             break;
 
             case "exit":
@@ -125,8 +125,12 @@ let addDept = () => {
         type: "input",
         message: "What's the name of your new Deptartment?"
     }).then(function(answers){
-        let query = `INSERT INTO department (name) VALUES (${answers.addedDept})`
-        connection.query(query, function(err){
+        let query ="INSERT INTO department SET?"
+        connection.query(query,
+        {
+            name: answers.addedDept
+        },
+        function(err){
             if(err) throw err;
             console.log(`${answers.addedDept} was successfully added`)
             startup()
@@ -135,7 +139,8 @@ let addDept = () => {
 };
 
 let addRole = () => {
-    inquirer.prompt([{
+    inquirer.prompt([
+    {
         name: "addedRole",
         type: "input",
         message: "What new employee role are you adding?"
@@ -149,7 +154,8 @@ let addRole = () => {
         connection.query(query,
         {
             title: answers.addedRole,
-            salary: answers.salary
+            salary: answers.salary,
+            deptId: answers.deptO || 0
         },
         function(err){
             if(err) throw err;
@@ -174,7 +180,7 @@ let addEmployee = () => {
         connection.query(query, 
         {
             firstName: answers.fstN,
-            LastName: answers.fstN
+            LastName: answers.lasN
         },
         function(err){
             if(err) throw err;
@@ -184,3 +190,42 @@ let addEmployee = () => {
     })
 };
 
+let updateinfo = () => {
+    inquirer.prompt([
+    {
+        name: "Info",
+        type: "list",
+        message: "What company information would you like to update?",
+        choices: ["Department information", "Employee information", "Job information", "Main Menu"]
+    }]).then(function(answers){
+        switch(answers.Info){
+            case "Department information":
+            updateDept()
+            break;
+
+            case "Employee information":
+            updateEmployee()
+            break;
+
+            case "Job information":
+            updateJob()
+            break;
+
+            case "Main Menu":
+            startup()
+            break;
+        }
+    })
+};
+
+let updateDept = () => {
+    
+};
+
+let updateEmployee = () => {
+
+};
+
+let updateJob = () => {
+
+};
