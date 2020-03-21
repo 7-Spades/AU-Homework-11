@@ -43,11 +43,11 @@ startup = () => {
             break;
 
             case "add more departments":
-            
+            addDept()
             break;
 
             case "add more employee roles":
-            
+            addRole()
             break;
 
             case "add more employees":
@@ -65,7 +65,7 @@ startup = () => {
     })
 };
 
-viewAll = () => {
+let viewAll = () => {
     let query = "SELECT Id, firstName, LastName FROM employee ";
     query += "RIGHT JOIN role ON employee.roleId = role.Id ";
     query += "RIGHT JOIN department ON role.deptId = department.Id ";
@@ -78,7 +78,7 @@ viewAll = () => {
     )
 };
 
-viewDept = () => {
+let viewDept = () => {
     inquirer.prompt({
         name: "Dept",
         type: "list",
@@ -99,7 +99,7 @@ viewDept = () => {
     })
 };
 
-viewRole = () => {
+let viewRole = () => {
     inquirer.prompt({
         name: "role",
         type: "list",
@@ -119,17 +119,43 @@ viewRole = () => {
     })
 }
 
-addDept = () => {
+let addDept = () => {
     inquirer.prompt({
         name: "addedDept",
         type: "input",
         message: "What's the name of your new Deptartment?"
     }).then(function(answers){
-        let query = `INSERT INTO department(name) VALUES (${answers.addedDept})`
+        let query = `INSERT INTO department (name) VALUES (${answers.addedDept})`
         connection.query(query, function(err, res){
             if(err) throw err;
             console.log(`${answers.addedDept} was successfully added`)
+            startup()
         })
     })
 }
+
+let addRole = () => {
+    inquirer.prompt([{
+        name: "addedRole",
+        type: "input",
+        message: "What new employee role are you adding?"
+    },
+    {
+        name: "salary",
+        type: "number",
+        message: "How much is their yearly salary"
+    }]).then(function(answers){
+        let query = "INSERT INTO role SET ?";
+        connection.query(query,
+        {
+            title: answers.addedRole,
+            salary: answers.salary
+        },
+        function(err, res){
+            if(err) throw err;
+            console.log(`${answers.addedRole} was successfully adde`)
+            startup()
+        })
+    })
+};
 
